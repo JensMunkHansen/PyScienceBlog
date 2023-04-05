@@ -1,5 +1,6 @@
-
-import urllib2, urllib,sys
+import sys
+import urllib
+from urllib.request import urlopen
 #
 # Refer https://wiki.cancerimagingarchive.net/display/Public/REST+API+Usage+Guide for complete list of API
 #
@@ -20,12 +21,12 @@ class TCIAClient:
         self.baseUrl = baseUrl + "/" + resource
 
     def execute(self, url, queryParameters={}):
-        queryParameters = dict((k, v) for k, v in queryParameters.iteritems() if v)
+        queryParameters = dict((k, v) for k, v in queryParameters.items() if v)
         headers = {"api_key" : self.apiKey }
-        queryString = "?%s" % urllib.urlencode(queryParameters)
+        queryString = "?%s" % urllib.parse.urlencode(queryParameters)
         requestUrl = url + queryString
-        request = urllib2.Request(url=requestUrl , headers=headers)
-        resp = urllib2.urlopen(request)
+        request = urllib.request.Request(url=requestUrl , headers=headers)
+        resp = urllib.request.urlopen(request)
         return resp
 
     def get_modality_values(self,collection = None , bodyPartExamined = None , modality = None , outputFormat = "json" ):
@@ -44,7 +45,7 @@ class TCIAClient:
     def contents_by_name(self, name = None):
         serviceUrl = self.baseUrl + "/query/" + self.CONTENTS_BY_NAME
         queryParameters = {"name" : name}
-        print serviceUrl
+        print(serviceUrl)
         resp = self.execute(serviceUrl,queryParameters)
         return resp
 
